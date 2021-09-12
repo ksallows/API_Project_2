@@ -11,17 +11,26 @@
 </head>
 
 <body>
-    <nav>
-        <a id="prev">Previous</a>
-        <a id="next">Next</a>
-    </nav>
-    <table class="uk-table">
-        <tr>
-            <th>Sprite</th>
-            <th>Pokemon</th>
-            <th>Type</th>
-        </tr>
-    </table>
+    <div class="uk-container uk-container-large uk-margin-top">
+        <nav>
+            <div class="uk-button-group">
+                <a id="prev" class="uk-button uk-button-default">Previous</a>
+                <a id="next" class="uk-button uk-button-default">Next</a>
+            </div>
+            <input id="jumpInput" placeholder="jump to page" class="uk-input uk-form-width-xsmall">
+            <a id="jump" class="uk-button uk-button-default">Jump</a>
+            Page <span id="pageNum"></span>
+        </nav>
+        <table class="uk-table-middle uk-table uk-table-small uk-table-divider">
+            <tr>
+                <th>#</th>
+                <th>Sprite</th>
+                <th>Pokemon</th>
+                <th>Type</th>
+            </tr>
+        </table>
+    </div>
+
 
     <script type="text/javascript" src="script.js"></script>
 </body>
