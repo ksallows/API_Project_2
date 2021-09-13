@@ -3,8 +3,6 @@ const table = document.querySelector("table");
 
 let currentPageOffset = 0;
 
-const nav = document.querySelector("nav");
-
 const nextButton = document.getElementById("next");
 const prevButton = document.getElementById("prev");
 const jumpButton = document.getElementById("jump");
@@ -14,30 +12,44 @@ const currentPage = document.getElementById("pageNum")
 let disablePrev = () => prevButton.setAttribute("disabled", "disabled");
 
 let initialize = () => {
-    disablePrev();
+    //disablePrev();
     getPokemonList();
-    currentPage.textContent = 1;
+
 }
 
-let getPokemonList = () => fetch(`${baseURL}pokemon?limit=20&offset=${currentPageOffset}`, { mode: "cors" }).then(result => result.json()).then(result => displayPokemon(result));
+let updatePageNum = () => currentPage.textContent = (currentPageOffset / 20) + 1;
 
-let getPokemonType = (url) => fetch(url, { mode: "cors" }).then(result => result.json()).then(result => result.types.length == 1 ? [result.types[0].type.name] : [result.types[0].type.name, result.types[1].type.name]);
+let getPokemonList = () => fetch(`${baseURL}pokemon?limit=20&offset=${currentPageOffset}`, { mode: "cors" })
+    .then(result => result.json())
+    .then(result => displayPokemon(result))
+    .catch(error => console.log(error))
 
-let getPokemonSprite = (url) => fetch(url, { mode: "cors" }).then(result => result.json()).then(result => result.sprites.front_default);
+let getPokemonType = (url) => fetch(url, { mode: "cors" })
+    .then(result => result.json())
+    .then(result => result.types.length == 1 ? [result.types[0].type.name] : [result.types[0].type.name, result.types[1].type.name])
+    .catch(error => console.log(error))
 
-let getPokemonID = (url) => fetch(url, { mode: "cors" }).then(result => result.json()).then(result => result.id);
+let getPokemonSprite = (url) => fetch(url, { mode: "cors" })
+    .then(result => result.json())
+    .then(result => result.sprites.front_default)
+    .catch(error => console.log(error))
+
+let getPokemonValue = (url, value) => fetch(url, { mode: "cors" })
+    .then(result => result.json())
+    .then(result => result[value])
+    .catch(error => console.log(error))
 
 let displayPokemon = async (pokemonJSON) => {
     while (table.childElementCount > 1) {
         table.removeChild(table.lastChild);
     }
     let pokemonList = pokemonJSON.results;
-    for (i = 0; i < pokemonList.length; i++) {
+    for (i = 0; i <= pokemonList.length - 1; i++) {
         let endpointURL = pokemonList[i].url;
         let tableRow = document.createElement("tr");
 
         let tableCell_ID = document.createElement("td");
-        tableCell_ID.textContent = await getPokemonID(endpointURL);
+        tableCell_ID.textContent = await getPokemonValue(endpointURL, "id");
 
         let tableCell_Sprite = document.createElement("td");
         let sprite = document.createElement("img");
@@ -51,7 +63,6 @@ let displayPokemon = async (pokemonJSON) => {
         tableCell_Type.textContent = pokemonType[0];
         pokemonType.length == 1 ? "" : tableCell_Type.textContent += " " + pokemonType[1];
 
-
         table.appendChild(tableRow);
         tableRow.appendChild(tableCell_ID);
         tableRow.appendChild(tableCell_Sprite);
@@ -59,27 +70,31 @@ let displayPokemon = async (pokemonJSON) => {
         tableRow.appendChild(tableCell_Name);
         tableRow.appendChild(tableCell_Type);
 
-        currentPageOffset !== 0 ? currentPage.textContent = currentPageOffset / 20 : ""
+        updatePageNum();
     }
 }
 
-
-// let prev = () => {
-//     if (currentPageOffset <= 20) {
-//         currentPageOffset += 20;
-//         getPokemonList();
-//     }
-// }
-
-// let jumpTo = (pageNum) => {
-
-// }
-
-nextButton.addEventListener("click", () => {
+let next = () => {
     currentPageOffset += 20;
     getPokemonList();
-});
-// prevButton.addEventListener("click", prev());
-// jumpButton.addEventListener("click", jumpTo(jumpInput.value));
+}
 
-window.addEventListener("DOMContentLoaded", initialize())
+let prev = () => {
+    if (currentPageOffset >= 20) {
+        currentPageOffset -= 20;
+        getPokemonList();
+    }
+}
+
+let jumpTo = (pageNum) => {
+    if (pageNum !== "") {
+        currentPageOffset = pageNum * 20;
+        getPokemonList();
+    }
+}
+
+nextButton.addEventListener("click", () => next());
+prevButton.addEventListener("click", () => prev());
+jumpButton.addEventListener("click", () => jumpTo(jumpInput.value));
+
+window.addEventListener("DOMContentLoaded", () => initialize())
