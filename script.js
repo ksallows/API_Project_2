@@ -1,16 +1,79 @@
 const baseURL = "https://pokeapi.co/api/v2/";
-const table = document.querySelector("table");
 
 let currentPageOffset = 0;
+let currentPageNum = 1;
 
 const nextButton = document.getElementById("next");
 const prevButton = document.getElementById("prev");
 const jumpButton = document.getElementById("jump");
 const jumpInput = document.getElementById("jumpInput");
 const loading = document.getElementById("loading");
-const currentPage = document.getElementById("pageNum");
+const currentPage = document.getElementById("page");
+const table = document.querySelector("table");
 
-let updatePageNum = () => currentPageOffset == 0 ? currentPage.textContent = 1 : currentPage.textContent = currentPageOffset / 20;
+let updatePageNum = () => {
+    currentPage.innerHTML = "";
+    currentPageNum = currentPageOffset == 0 ? 1 : currentPageOffset / 20;
+    console.log(currentPageNum);
+
+    if (currentPageNum < 4) { // 1 - 3
+        for (i = currentPageNum - 2; i <= currentPageNum + 2; i++) {
+            if (i > 0) {
+                i == currentPageNum ? createListItem(i, "active") : createListItem(i);
+            }
+        }
+        createDots();
+        createListItem(55);
+    }
+    else if (currentPageNum > 3 && currentPageNum < 53) { // 4 - 52
+        createListItem(1);
+        createDots();
+        for (i = currentPageNum - 2; i <= currentPageNum + 2; i++) {
+            if (i > 0) {
+                i == currentPageNum ? createListItem(i, "active") : createListItem(i);
+            }
+        }
+        createDots();
+        createListItem(55);
+    }
+    else if (currentPageNum > 52) { // 53 - 55
+        createListItem(1);
+        createDots();
+        for (i = currentPageNum - 2; i <= currentPageNum + 2; i++) {
+            if (i < 56) {
+                i == currentPageNum ? createListItem(i, "active") : createListItem(i);
+            }
+        }
+    }
+
+}
+
+let createDots = () => {
+    let listItem = document.createElement("li");
+    let span = document.createElement("span");
+    span.innerText = "...";
+    listItem.classList.add("uk-disabled");
+    listItem.appendChild(span);
+    currentPage.appendChild(listItem);
+}
+
+let createListItem = (num, className) => {
+    let listItem = document.createElement("li");
+    let link = document.createElement("a");
+    if (className == "active") {
+        listItem.classList.add("uk-active");
+        let span = document.createElement("span")
+        span.innerText = num;
+        listItem.appendChild(span);
+    }
+    else {
+        link.href = "#";
+        link.innerText = num;
+        link.addEventListener("click", () => jumpTo(num));
+        listItem.appendChild(link);
+    }
+    currentPage.appendChild(listItem);
+}
 
 let disablePrev = () => prevButton.classList.add("disabled");
 let enablePrev = () => prevButton.classList.remove("disabled");
@@ -96,7 +159,7 @@ let prev = () => {
 }
 
 let jumpTo = (pageNum) => {
-    if (pageNum !== "") {
+    if (pageNum !== "" && pageNum <= 55) {
         currentPageOffset = pageNum * 20;
         getPokemonList();
     }
