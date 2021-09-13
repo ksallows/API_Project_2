@@ -12,6 +12,9 @@ const currentPage = document.getElementById("pageNum");
 
 let updatePageNum = () => currentPage.textContent = (currentPageOffset / 20) + 1;
 
+disablePrev = () => prevButton.classList.add("disabled");
+enablePrev = () => prevButton.classList.remove("disabled");
+
 let getPokemonList = () => {
     table.style.display = "none";
     loading.style.display = "block";
@@ -37,6 +40,9 @@ let getPokemonValue = (url, value) => fetch(url, { mode: "cors" })
     .catch(error => console.log(error))
 
 let displayPokemon = async (pokemonJSON) => {
+    if (currentPageOffset < 20) {
+        disablePrev();
+    }
     while (table.childElementCount > 1) {
         table.removeChild(table.lastChild);
     }
@@ -78,6 +84,7 @@ let displayPokemon = async (pokemonJSON) => {
 let next = () => {
     currentPageOffset += 20;
     getPokemonList();
+    enablePrev();
 }
 
 let prev = () => {
