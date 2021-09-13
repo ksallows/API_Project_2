@@ -7,22 +7,19 @@ const nextButton = document.getElementById("next");
 const prevButton = document.getElementById("prev");
 const jumpButton = document.getElementById("jump");
 const jumpInput = document.getElementById("jumpInput");
-const currentPage = document.getElementById("pageNum")
-
-let disablePrev = () => prevButton.setAttribute("disabled", "disabled");
-
-let initialize = () => {
-    //disablePrev();
-    getPokemonList();
-
-}
+const loading = document.getElementById("loading");
+const currentPage = document.getElementById("pageNum");
 
 let updatePageNum = () => currentPage.textContent = (currentPageOffset / 20) + 1;
 
-let getPokemonList = () => fetch(`${baseURL}pokemon?limit=20&offset=${currentPageOffset}`, { mode: "cors" })
-    .then(result => result.json())
-    .then(result => displayPokemon(result))
-    .catch(error => console.log(error))
+let getPokemonList = () => {
+    table.style.display = "none";
+    loading.style.display = "block";
+    return fetch(`${baseURL}pokemon?limit=20&offset=${currentPageOffset}`, { mode: "cors" })
+        .then(result => result.json())
+        .then(result => displayPokemon(result))
+        .catch(error => console.log(error))
+}
 
 let getPokemonType = (url) => fetch(url, { mode: "cors" })
     .then(result => result.json())
@@ -44,7 +41,7 @@ let displayPokemon = async (pokemonJSON) => {
         table.removeChild(table.lastChild);
     }
     let pokemonList = pokemonJSON.results;
-    for (i = 0; i <= pokemonList.length - 1; i++) {
+    for (i = 0; i < pokemonList.length; i++) {
         let endpointURL = pokemonList[i].url;
         let tableRow = document.createElement("tr");
 
@@ -60,8 +57,10 @@ let displayPokemon = async (pokemonJSON) => {
 
         let tableCell_Type = document.createElement("td");
         let pokemonType = await getPokemonType(endpointURL);
-        tableCell_Type.textContent = pokemonType[0];
-        pokemonType.length == 1 ? "" : tableCell_Type.textContent += " " + pokemonType[1];
+        tableCell_Type.innerHTML = "<span class='" + pokemonType[0] + "-type'>" + pokemonType[0] + "</span>";
+        if (pokemonType.length == 2) {
+            tableCell_Type.innerHTML += "<span class='" + pokemonType[1] + "-type'>" + pokemonType[1] + "</span>"
+        }
 
         table.appendChild(tableRow);
         tableRow.appendChild(tableCell_ID);
@@ -70,8 +69,10 @@ let displayPokemon = async (pokemonJSON) => {
         tableRow.appendChild(tableCell_Name);
         tableRow.appendChild(tableCell_Type);
 
-        updatePageNum();
     }
+    updatePageNum();
+    loading.style.display = "none";
+    table.style.display = "table";
 }
 
 let next = () => {
@@ -97,4 +98,4 @@ nextButton.addEventListener("click", () => next());
 prevButton.addEventListener("click", () => prev());
 jumpButton.addEventListener("click", () => jumpTo(jumpInput.value));
 
-window.addEventListener("DOMContentLoaded", () => initialize())
+window.addEventListener("DOMContentLoaded", () => getPokemonList())

@@ -1,1 +1,53 @@
 .uk-table tr td {text-transform:uppercase;}
+#loading {margin:20px auto;width:100px;}
+table {display:none;}
+
+:root {
+    --fire-color:#ff742e;
+    --water-color:#4dccff;
+    --grass-color: #088c39;
+    --normal-color:#a6a090;
+    --ghost-color: #2b2246;
+    --flying-color:#a3bfc9;
+    --fairy-color:#e896eb;
+    --fighting-color:#852500;
+    --bug-color:#a7ad4c;
+    --psychic-color:#e324dd;
+    --steel-color:#bfbfbf;
+    --poison-color:#8032ad;
+    --ground-color:#b5975b;
+    --rock-color:#574931;
+    --electric-color:#ffdd00;
+    --dragon-color:#3416ba;
+    --dark-color:#525252;
+    --ice-color:#52fcff
+}
+
+.fire-type {background-color:var(--fire-color)}
+.water-type {background-color:var(--water-color)}
+.grass-type {background-color:var(--grass-color)}
+.normal-type {background-color:var(--normal-color)}
+.ghost-type {background-color:var(--ghost-color)}
+.flying-type {background-color:var(--flying-color)}
+.fairy-type {background-color:var(--fairy-color)}
+.fighting-type {background-color:var(--fighting-color)}
+.bug-type {background-color:var(--bug-color)}
+.psychic-type {background-color:var(--psychic-color);}
+.steel-type {background-color:var(--steel-color);}
+.poison-type {background-color:var(--poison-color);}
+.ground-type {background-color:var(--ground-color);}
+.rock-type {background-color:var(--rock-color);}
+.electric-type {background-color:var(--electric-color);}
+.dragon-type {background-color:var(--dragon-color);}
+.dark-type {background-color:var(--dark-color);}
+.ice-type {background-color:var(--ice-color)}
+
+td span {
+    color:#fff;
+    padding:3px 8px;
+    display:inline-block;
+    border-radius:5px;
+    margin-right:5px;
+    font-size:8pt;
+    text-shadow:1px 1px #000;
+}
