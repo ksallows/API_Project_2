@@ -10,10 +10,10 @@ const jumpInput = document.getElementById("jumpInput");
 const loading = document.getElementById("loading");
 const currentPage = document.getElementById("pageNum");
 
-let updatePageNum = () => currentPage.textContent = (currentPageOffset / 20) + 1;
+let updatePageNum = () => currentPageOffset == 0 ? currentPage.textContent = 1 : currentPage.textContent = currentPageOffset / 20;
 
-disablePrev = () => prevButton.classList.add("disabled");
-enablePrev = () => prevButton.classList.remove("disabled");
+let disablePrev = () => prevButton.classList.add("disabled");
+let enablePrev = () => prevButton.classList.remove("disabled");
 
 let getPokemonList = () => {
     table.style.display = "none";
@@ -42,6 +42,8 @@ let getPokemonValue = (url, value) => fetch(url, { mode: "cors" })
 let displayPokemon = async (pokemonJSON) => {
     if (currentPageOffset < 20) {
         disablePrev();
+    } else if (currentPageOffset > 0) {
+        enablePrev();
     }
     while (table.childElementCount > 1) {
         table.removeChild(table.lastChild);
@@ -84,7 +86,6 @@ let displayPokemon = async (pokemonJSON) => {
 let next = () => {
     currentPageOffset += 20;
     getPokemonList();
-    enablePrev();
 }
 
 let prev = () => {
