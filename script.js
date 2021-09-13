@@ -13,8 +13,9 @@ const table = document.querySelector("table");
 
 let updatePageNum = () => {
     currentPage.innerHTML = "";
-    currentPageNum = currentPageOffset == 0 ? 1 : currentPageOffset / 20;
-    console.log(currentPageNum);
+    currentPageNum = currentPageOffset == 0 ? 1 : (currentPageOffset / 20) + 1;
+    console.log(`Page Number: ${currentPageNum}`);
+    console.log(`Page Offset: ${currentPageOffset}`);
 
     if (currentPageNum < 4) { // 1 - 3
         for (i = currentPageNum - 2; i <= currentPageNum + 2; i++) {
@@ -160,7 +161,7 @@ let prev = () => {
 
 let jumpTo = (pageNum) => {
     if (pageNum !== "" && pageNum <= 55) {
-        currentPageOffset = pageNum * 20;
+        currentPageOffset = pageNum == 1 ? 0 : (pageNum - 1) * 20;
         getPokemonList();
     }
 }
