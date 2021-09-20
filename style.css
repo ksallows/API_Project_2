@@ -61,3 +61,5 @@ td span {
 ul {margin:0;}
 
 .uk-pagination .uk-active {font-weight:bold;}
+
+#error {display:none;}
