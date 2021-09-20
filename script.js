@@ -21,12 +21,9 @@ let updatePageNum = () => {
     currentPageNum = currentPageOffset == 0 ? 1 : (currentPageOffset / 20) + 1;
     console.log(`Page Number: ${currentPageNum}`);
     console.log(`Page Offset: ${currentPageOffset}`);
-
     if (currentPageNum <= 3) { // 1 - 3
         for (i = currentPageNum - 2; i <= currentPageNum + 2; i++) {
-            if (i > 0) {
-                i == currentPageNum ? createListItem(i, "active") : createListItem(i);
-            }
+            if (i > 0) i == currentPageNum ? createListItem(i, "active") : createListItem(i);
         }
         createDots();
         createListItem(56);
@@ -35,9 +32,7 @@ let updatePageNum = () => {
         createListItem(1);
         createDots();
         for (i = currentPageNum - 2; i <= currentPageNum + 2; i++) {
-            if (i > 0) {
-                i == currentPageNum ? createListItem(i, "active") : createListItem(i);
-            }
+            if (i > 0) i == currentPageNum ? createListItem(i, "active") : createListItem(i);
         }
         createDots();
         createListItem(56);
@@ -46,9 +41,7 @@ let updatePageNum = () => {
         createListItem(1);
         createDots();
         for (i = currentPageNum - 2; i <= currentPageNum + 2; i++) {
-            if (i < 57) {
-                i == currentPageNum ? createListItem(i, "active") : createListItem(i);
-            }
+            if (i < 57) i == currentPageNum ? createListItem(i, "active") : createListItem(i);
         }
     }
 }
@@ -111,19 +104,11 @@ let getPokemonValue = (url, value) => fetch(url, { mode: "cors" })
     .catch(error => displayError(error))
 
 let displayPokemon = async pokemonJSON => {
-    if (currentPageOffset < 20) {
-        disablePrev();
-    } else if (currentPageOffset > 0) {
-        enablePrev();
-    }
-    if (currentPageOffset >= 1100) {
-        disableNext();
-    } else if (currentPageOffset < 1100) {
-        enableNext();
-    }
-    while (table.childElementCount > 1) {
-        table.removeChild(table.lastChild);
-    }
+    if (currentPageOffset < 20) disablePrev();
+    else if (currentPageOffset > 0) enablePrev();
+    if (currentPageOffset >= 1100) disableNext();
+    else if (currentPageOffset < 1100) enableNext();
+    while (table.childElementCount > 1) table.removeChild(table.lastChild);
     let pokemonList = pokemonJSON.results;
     for (i = 0; i < pokemonList.length; i++) {
         let endpointURL = pokemonList[i].url;
@@ -140,9 +125,8 @@ let displayPokemon = async pokemonJSON => {
         let tableCell_Type = document.createElement("td");
         let pokemonType = await getPokemonType(endpointURL);
         tableCell_Type.innerHTML = "<span class='" + pokemonType[0] + "-type'>" + pokemonType[0] + "</span>";
-        if (pokemonType.length == 2) {
+        if (pokemonType.length == 2)
             tableCell_Type.innerHTML += "<span class='" + pokemonType[1] + "-type'>" + pokemonType[1] + "</span>"
-        }
         table.appendChild(tableRow);
         tableRow.appendChild(tableCell_ID);
         tableRow.appendChild(tableCell_Sprite);
