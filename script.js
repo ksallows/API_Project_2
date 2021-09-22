@@ -160,8 +160,8 @@ let jumpTo = pageNum => {
     }
 }
 
-nextButton.addEventListener("click", () => next());
-prevButton.addEventListener("click", () => prev());
+nextButton.addEventListener("click", next);
+prevButton.addEventListener("click", prev);
 jumpButton.addEventListener("click", () => jumpTo(jumpInput.value));
 
 window.addEventListener("DOMContentLoaded", () => getPokemonList())
